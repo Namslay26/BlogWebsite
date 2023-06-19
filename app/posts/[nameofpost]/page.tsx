@@ -23,6 +23,19 @@ export const generateStaticParams = async () => {
 }
 */
 
+function PostPage(props:any) {
+    const nameofpost = props.params.nameofpost;
+    const allcontent = getFileContent(nameofpost);
+  return (
+    <div className='mt-20 max-w-screen-sm sm:max-w-screen-sm mx-auto'>
+      <h2 className=' text-5xl font-black text-indigo-800'> {allcontent.data.title}</h2>
+      <article className="prose md:prose-lg lg:prose-xl">
+      <Markdown>{allcontent.content}</Markdown>
+      </article>
+    </div>
+  )
+}
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const postsDirectory = path.join(process.cwd(), 'posts');
   const fileNames = fs.readdirSync(postsDirectory);
@@ -52,19 +65,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     },
   };
 };
-
-
-function PostPage(props:any) {
-    const nameofpost = props.params.nameofpost;
-    const allcontent = getFileContent(nameofpost);
-  return (
-    <div className='mt-20 max-w-screen-sm sm:max-w-screen-sm mx-auto'>
-      <h2 className=' text-5xl font-black text-indigo-800'> {allcontent.data.title}</h2>
-      <article className="prose md:prose-lg lg:prose-xl">
-      <Markdown>{allcontent.content}</Markdown>
-      </article>
-    </div>
-  )
-}
 
 export default PostPage
