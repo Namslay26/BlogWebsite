@@ -1,8 +1,10 @@
 import React from 'react'
 import fs from 'fs'
 import Markdown from 'markdown-to-jsx'
+import path from 'path'
 import graymatter from 'gray-matter'
-import getPostData from '@/components/getPostData'
+import { GetStaticPaths, GetStaticProps } from 'next'
+//import getPostData from '@/components/getPostData'
 
 function getFileContent(nameofpost: string) {
     const folder = 'posts/'
@@ -11,6 +13,7 @@ function getFileContent(nameofpost: string) {
     const metacontent = graymatter(content);
     return metacontent;
 }
+/*
 
 export const generateStaticParams = async () => {
   const posts = getPostData();
@@ -18,6 +21,37 @@ export const generateStaticParams = async () => {
     nameofpost: post.nameofpost
   })
 }
+*/
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const postsDirectory = path.join(process.cwd(), 'posts');
+  const fileNames = fs.readdirSync(postsDirectory);
+
+  const paths = fileNames.map((fileName) => {
+    const slug = fileName.replace(/\.md$/, '');
+    return {
+      params: {
+        nameofpost: slug,
+      },
+    };
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const nameofpost = params?.nameofpost as string;
+  const allcontent = getFileContent(nameofpost);
+
+  return {
+    props: {
+      allcontent,
+    },
+  };
+};
 
 
 function PostPage(props:any) {
