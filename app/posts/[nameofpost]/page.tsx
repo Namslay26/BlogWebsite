@@ -2,19 +2,18 @@ import React from 'react'
 import fs from 'fs'
 import Markdown from 'markdown-to-jsx'
 import graymatter from 'gray-matter'
-import getPostData from '@/components/getPostData'
-import path from 'path'
 
 function getFileContent(nameofpost: string) {
-    const folder = 'posts/'
+    const folder = 'post/'
     const file = `${folder}${nameofpost}.md`
     const content = fs.readFileSync(file,'utf-8')
     const metacontent = graymatter(content);
     return metacontent;
 }
 
+/*
 export async function generateStaticParams() {
-  const files = fs.readdirSync(path.join('posts'))
+  const files = fs.readdirSync(path.join('post'))
 
   const paths = files.map(filename => ({
       slug: filename.replace('.md', '')
@@ -22,6 +21,7 @@ export async function generateStaticParams() {
 
   return paths
 }
+*/
 
 /*
 export const generateStaticParams = async () => {
